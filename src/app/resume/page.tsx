@@ -123,9 +123,22 @@ const ResumePage = () => {
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-3">Amrita Gautam</h1>
             <div className="w-24 h-1 bg-blue-200 mx-auto mb-4"></div>
-            <p className="text-xl text-blue-100 mb-6 font-medium">Advocate & Assistant Professor</p>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <p className="text-xl text-blue-100 font-medium">Advocate & Assistant Professor</p>
+              <a 
+                href="https://amritagautam.com.np/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 bg-blue-500/30 hover:bg-blue-500/50 px-3 py-1 rounded-full text-sm text-blue-100 hover:text-white transition-all duration-300 border border-blue-400/30 hover:border-blue-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9" />
+                </svg>
+                Visit Website
+              </a>
+            </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 text-sm">
               <div className="flex items-center justify-center gap-2 bg-blue-500/30 rounded-lg p-3">
                 <svg className="w-4 h-4 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -144,6 +157,12 @@ const ResumePage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span className="text-xs">amritagautam86@gmail.com</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 bg-blue-500/30 rounded-lg p-3">
+                <svg className="w-4 h-4 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9" />
+                </svg>
+                <span className="text-xs">amritagautam.com.np</span>
               </div>
               <div className="flex items-center justify-center gap-2 bg-blue-500/30 rounded-lg p-3">
                 <svg className="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 24 24">
