@@ -28,23 +28,57 @@ const ResumePage = () => {
         height: resumeRef.current.scrollHeight,
       });
 
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png');
+      // Create PDF with proper dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 0;
-
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      // Get PDF dimensions
+      const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm for A4
+      const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm for A4
+      
+      // Get canvas dimensions
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      
+      // Calculate the ratio to fit the canvas to PDF width
+      const ratio = pdfWidth / (canvasWidth / 2); // Divide by 2 because of scale: 2
+      const scaledHeight = (canvasHeight / 2) * ratio; // Divide by 2 because of scale: 2
+      
+      // Convert canvas to image
+      const imgData = canvas.toDataURL('image/png');
+      
+      // Check if content fits on one page
+      if (scaledHeight <= pdfHeight) {
+        // Fits on one page
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, scaledHeight);
+      } else {
+        // Multiple pages needed
+        let yPosition = 0;
+        let remainingHeight = scaledHeight;
+        
+        while (remainingHeight > 0) {
+          const pageHeight = Math.min(pdfHeight, remainingHeight);
+          
+          if (yPosition > 0) {
+            pdf.addPage();
+          }
+          
+          pdf.addImage(
+            imgData, 
+            'PNG', 
+            0, 
+            -yPosition, // Negative to show different parts of the image
+            pdfWidth, 
+            scaledHeight
+          );
+          
+          yPosition += pdfHeight;
+          remainingHeight -= pdfHeight;
+        }
+      }
       
       // Download the PDF
       pdf.save('Amrita_Gautam_Resume.pdf');
