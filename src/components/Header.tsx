@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,8 +17,19 @@ export default function Header() {
     <header className="bg-white shadow-md fixed w-full top-0 z-50">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-600">
-            Amrita Gautam
+          <div className="flex items-center gap-3">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-blue-600">
+              <Image
+                src="/amrita.png"
+                alt="Amrita Gautam"
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            </div>
+            <div className="text-2xl font-bold text-blue-600">
+              Amrita Gautam
+            </div>
           </div>
           
           {/* Desktop Menu */}
