@@ -5,23 +5,52 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Amrita Gautam - Advocate & Assistant Professor',
-  description: 'Professional portfolio of Amrita Gautam, Advocate and Assistant Professor at Kathmandu School of Law. Specializing in legal education, human rights, and advocacy.',
-  keywords: 'Amrita Gautam, Advocate, Assistant Professor, Kathmandu School of Law, Legal Education, Human Rights, Nepal, Lawyer',
+  title: {
+    default: 'Amrita Gautam - Advocate & Assistant Professor',
+    template: '%s | Amrita Gautam'
+  },
+  description: 'Dedicated legal professional with expertise in teaching, research, and advocacy. Currently serving as Assistant Professor at Kathmandu School of Law with a passion for human rights and legal education.',
+  keywords: [
+    'Amrita Gautam',
+    'Advocate Nepal',
+    'Assistant Professor',
+    'Kathmandu School of Law',
+    'Legal Professional',
+    'Human Rights',
+    'Legal Education',
+    'Nepal Lawyer',
+    'Constitutional Law',
+    'Banking Law',
+    'Insurance Law'
+  ],
   authors: [{ name: 'Amrita Gautam' }],
   creator: 'Amrita Gautam',
+  publisher: 'Amrita Gautam',
+  metadataBase: new URL('https://amritagautam.com.np'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Amrita Gautam - Advocate & Assistant Professor',
-    description: 'Professional portfolio of Amrita Gautam, Advocate and Assistant Professor at Kathmandu School of Law.',
-    url: 'https://amritagautam.com',
-    siteName: 'Amrita Gautam Portfolio',
-    locale: 'en_US',
     type: 'website',
+    locale: 'en_US',
+    url: 'https://amritagautam.com.np',
+    title: 'Amrita Gautam - Advocate & Assistant Professor',
+    description: 'Dedicated legal professional with expertise in teaching, research, and advocacy. Currently serving as Assistant Professor at Kathmandu School of Law.',
+    siteName: 'Amrita Gautam',
+    images: [
+      {
+        url: '/amrita.png',
+        width: 1200,
+        height: 630,
+        alt: 'Amrita Gautam - Professional Portrait',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Amrita Gautam - Advocate & Assistant Professor',
-    description: 'Professional portfolio of Amrita Gautam, Advocate and Assistant Professor at Kathmandu School of Law.',
+    description: 'Dedicated legal professional with expertise in teaching, research, and advocacy.',
+    images: ['/amrita.png'],
   },
   robots: {
     index: true,

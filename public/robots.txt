@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amritagautam.com.np/sitemap.xml
