@@ -20,12 +20,12 @@ const ResumePage = () => {
 
       // Create canvas from the resume content
       const canvas = await html2canvas(resumeRef.current, {
-        scale: 2, // Higher quality
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
+        background: '#ffffff',
         width: resumeRef.current.scrollWidth,
         height: resumeRef.current.scrollHeight,
+        // scale: 2
       });
 
       // Create PDF with proper dimensions
@@ -44,8 +44,8 @@ const ResumePage = () => {
       const canvasHeight = canvas.height;
       
       // Calculate the ratio to fit the canvas to PDF width
-      const ratio = pdfWidth / (canvasWidth / 2); // Divide by 2 because of scale: 2
-      const scaledHeight = (canvasHeight / 2) * ratio; // Divide by 2 because of scale: 2
+      const ratio = pdfWidth / (canvasWidth / 2); // Divide by 2 because of windowWidth/Height scaling
+      const scaledHeight = (canvasHeight / 2) * ratio; // Divide by 2 because of windowWidth/Height scaling
       
       // Convert canvas to image
       const imgData = canvas.toDataURL('image/png');
