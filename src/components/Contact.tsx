@@ -1,4 +1,90 @@
+'use client'
+import { useState, FormEvent, useEffect } from 'react'
+import emailjs from '@emailjs/browser'
+
+interface FormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
 export default function Contact() {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [status, setStatus] = useState<{
+    type: 'success' | 'error' | null
+    message: string
+  }>({ type: null, message: '' })
+
+  // Initialize EmailJS when component mounts
+  useEffect(() => {
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    if (publicKey) {
+      emailjs.init(publicKey)
+      console.log('EmailJS initialized successfully')
+    } else {
+      console.error('EmailJS public key not found')
+    }
+  }, [])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setStatus({ type: null, message: '' })
+
+    try {
+      // Initialize EmailJS with test credentials
+      emailjs.init('bcLNirNSgu_R8PJbL') // Replace with actual key
+      
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        to_name: 'Amrita Gautam',
+        to_email: 'amritagautam86@gmail.com',
+        subject: formData.subject,
+        message: formData.message,
+        reply_to: formData.email
+      }
+
+      const response = await emailjs.send(
+        'service_rfoffze',    // Replace with actual service ID
+        'template_d7blh9s',   // Replace with actual template ID
+        templateParams
+      )
+
+      console.log('Success:', response)
+      setStatus({
+        type: 'success',
+        message: 'Message sent successfully! I will get back to you soon.'
+      })
+      
+      setFormData({ name: '', email: '', subject: '', message: '' })
+      
+    } catch (error) {
+      console.error('Error:', error)
+      setStatus({
+        type: 'error',
+        message: 'Failed to send message. Please try again.'
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="container mx-auto px-6">
@@ -86,60 +172,119 @@ export default function Contact() {
               <h3 className="text-2xl font-semibold mb-6 text-blue-600">
                 Send a Message
               </h3>
-              <form className="space-y-6">
+              
+              {/* Status Message */}
+              {status.type && (
+                <div className={`mb-6 p-4 rounded-lg ${
+                  status.type === 'success' 
+                    ? 'bg-green-100 text-green-700 border border-green-200' 
+                    : 'bg-red-100 text-red-700 border border-red-200'
+                }`}>
+                  <div className="flex items-center">
+                    {status.type === 'success' ? (
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {status.message}
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     id="name"
                     name="name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder="Your full name"
                   />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
+                    Email Address *
                   </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder="your.email@example.com"
                   />
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
+                    Subject *
                   </label>
                   <input
                     type="text"
                     id="subject"
                     name="subject"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder="Message subject"
                   />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
+                    Message *
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     rows={5}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
                     placeholder="Your message here..."
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                  disabled={isLoading}
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition duration-300 flex items-center justify-center ${
+                    isLoading
+                      ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                      : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5'
+                  }`}
                 >
-                  Send Message
+                  {isLoading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending Message...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </div>
